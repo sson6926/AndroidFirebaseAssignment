@@ -42,6 +42,34 @@ public class TicketsRepository {
             .addOnFailureListener(e -> callback.onError(e.getMessage()));
     }
 
+    public void createTickets(String showtimeId, List<String> seatNumbers, TicketCallback callback) {
+        FirebaseUser user = auth.getCurrentUser();
+        if (user == null) {
+            callback.onError("User not logged in.");
+            return;
+        }
+
+        if (seatNumbers == null || seatNumbers.isEmpty()) {
+            callback.onError("No seats selected.");
+            return;
+        }
+
+        com.google.firebase.firestore.WriteBatch batch = firestore.batch();
+        for (String seatNumber : seatNumbers) {
+            Map<String, Object> data = new HashMap<>();
+            data.put("userId", user.getUid());
+            data.put("showtimeId", showtimeId);
+            data.put("seatNumber", seatNumber);
+            data.put("createdAt", FieldValue.serverTimestamp());
+
+            batch.set(firestore.collection("tickets").document(), data);
+        }
+
+        batch.commit()
+            .addOnSuccessListener(unused -> callback.onSuccess())
+            .addOnFailureListener(e -> callback.onError(e.getMessage()));
+    }
+
     public void fetchMyTickets(TicketsCallback callback) {
         FirebaseUser user = auth.getCurrentUser();
         if (user == null) {

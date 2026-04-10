@@ -13,6 +13,7 @@ import androidx.core.content.ContextCompat;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.shawningx.week10.fcm.FcmTokenRepository;
 import com.shawningx.week10.ui.auth.LoginActivity;
 import com.shawningx.week10.ui.home.HomeFragment;
 import com.shawningx.week10.ui.profile.ProfileFragment;
@@ -65,7 +66,10 @@ public class MainActivity extends AppCompatActivity {
         if (FirebaseAuth.getInstance().getCurrentUser() == null) {
             startActivity(new Intent(this, LoginActivity.class));
             finish();
+            return;
         }
+
+        new FcmTokenRepository().refreshAndSaveToken();
     }
 
     private void requestNotificationPermission() {

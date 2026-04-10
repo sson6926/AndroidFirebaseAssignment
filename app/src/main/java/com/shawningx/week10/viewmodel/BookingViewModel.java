@@ -35,6 +35,21 @@ public class BookingViewModel extends ViewModel {
         });
     }
 
+    public void bookTickets(String showtimeId, java.util.List<String> seatNumbers) {
+        bookingState.setValue(BookingResult.loading());
+        repository.createTickets(showtimeId, seatNumbers, new TicketsRepository.TicketCallback() {
+            @Override
+            public void onSuccess() {
+                bookingState.postValue(BookingResult.success());
+            }
+
+            @Override
+            public void onError(String message) {
+                bookingState.postValue(BookingResult.error(message));
+            }
+        });
+    }
+
     public void resetState() {
         bookingState.setValue(BookingResult.idle());
     }

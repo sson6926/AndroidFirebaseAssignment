@@ -3,6 +3,7 @@ package com.shawningx.week10;
 import android.app.Application;
 
 import com.google.firebase.FirebaseApp;
+import com.shawningx.week10.fcm.NotificationHelper;
 
 public class MovieTicketApp extends Application {
     @Override
@@ -10,5 +11,6 @@ public class MovieTicketApp extends Application {
         super.onCreate();
         // Ensure Firebase is initialized before any Firebase usage.
         FirebaseApp.initializeApp(this);
+        NotificationHelper.ensureChannel(this);
     }
 }

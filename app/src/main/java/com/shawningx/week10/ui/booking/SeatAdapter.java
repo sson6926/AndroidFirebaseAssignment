@@ -11,15 +11,17 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.shawningx.week10.R;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class SeatAdapter extends RecyclerView.Adapter<SeatAdapter.SeatViewHolder> {
     private final List<String> seats = new ArrayList<>();
-    private int selectedPosition = -1;
+    private final Set<Integer> selectedPositions = new HashSet<>();
     private OnSeatClickListener listener;
 
     public interface OnSeatClickListener {
-        void onSeatSelected(String seat);
+        void onSeatSelected(List<String> seats);
     }
 
     public void setOnSeatClickListener(OnSeatClickListener listener) {
@@ -31,15 +33,18 @@ public class SeatAdapter extends RecyclerView.Adapter<SeatAdapter.SeatViewHolder
         if (newSeats != null) {
             seats.addAll(newSeats);
         }
-        selectedPosition = -1;
+        selectedPositions.clear();
         notifyDataSetChanged();
     }
 
-    public String getSelectedSeat() {
-        if (selectedPosition < 0 || selectedPosition >= seats.size()) {
-            return null;
+    public List<String> getSelectedSeats() {
+        List<String> selected = new ArrayList<>();
+        for (Integer position : selectedPositions) {
+            if (position >= 0 && position < seats.size()) {
+                selected.add(seats.get(position));
+            }
         }
-        return seats.get(selectedPosition);
+        return selected;
     }
 
     @NonNull
@@ -53,16 +58,17 @@ public class SeatAdapter extends RecyclerView.Adapter<SeatAdapter.SeatViewHolder
     @Override
     public void onBindViewHolder(@NonNull SeatViewHolder holder, int position) {
         String seat = seats.get(position);
-        holder.bind(seat, position == selectedPosition);
+        holder.bind(seat, selectedPositions.contains(position));
         holder.itemView.setOnClickListener(view -> {
-            int previous = selectedPosition;
-            selectedPosition = holder.getBindingAdapterPosition();
-            if (previous >= 0) {
-                notifyItemChanged(previous);
+            int current = holder.getBindingAdapterPosition();
+            if (selectedPositions.contains(current)) {
+                selectedPositions.remove(current);
+            } else {
+                selectedPositions.add(current);
             }
-            notifyItemChanged(selectedPosition);
+            notifyItemChanged(current);
             if (listener != null) {
-                listener.onSeatSelected(seat);
+                listener.onSeatSelected(getSelectedSeats());
             }
         });
     }

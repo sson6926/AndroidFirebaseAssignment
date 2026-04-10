@@ -39,8 +39,14 @@
     <string name="ticket_showtime_label">Showtime: %1$s</string>
     <string name="notification_channel_name">Nhac gio chieu</string>
     <string name="notification_channel_desc">Thong bao nhac gio xem phim</string>
+    <string name="notification_channel_id">movie_reminder</string>
     <string name="notification_default_title">Nhac gio xem phim</string>
     <string name="notification_default_body">Sap den gio chieu, dung quen xem phim!</string>
+    <string name="notification_test_title">Test booking</string>
+    <string name="notification_test_time">now</string>
+    <string name="notification_test_sent">Da gui thong bao test</string>
+    <string name="notification_test_login_required">Can dang nhap de gui thong bao</string>
+    <string name="notification_test_content_desc">Gui thong bao test</string>
     <string name="nav_home">Trang chu</string>
     <string name="nav_tickets">Ve cua toi</string>
     <string name="nav_profile">Profile</string>

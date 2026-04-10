@@ -2,6 +2,8 @@ package com.shawningx.week10.ui.booking;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
@@ -15,6 +17,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.shawningx.week10.R;
+import com.shawningx.week10.fcm.FcmFunctionsRepository;
+import com.shawningx.week10.fcm.NotificationHelper;
 import com.shawningx.week10.ui.auth.LoginActivity;
 import com.shawningx.week10.ui.common.BookingResult;
 import com.shawningx.week10.viewmodel.BookingViewModel;
@@ -33,14 +37,18 @@ public class BookingActivity extends AppCompatActivity {
     private Button confirmButton;
     private ProgressBar loadingView;
     private TextView selectedSeatView;
+    private FcmFunctionsRepository functionsRepository;
+    private String movieTitle;
+    private String showtimeTime;
+    private List<String> lastSelectedSeats = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_booking);
 
-        TextView movieTitle = findViewById(R.id.text_movie_title);
-        TextView showtimeTime = findViewById(R.id.text_showtime_time);
+        TextView movieTitleView = findViewById(R.id.text_movie_title);
+        TextView showtimeTimeView = findViewById(R.id.text_showtime_time);
         TextView theater = findViewById(R.id.text_theater);
         selectedSeatView = findViewById(R.id.text_selected_seat);
         confirmButton = findViewById(R.id.button_confirm);
@@ -49,12 +57,12 @@ public class BookingActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         String showtimeId = intent.getStringExtra(EXTRA_SHOWTIME_ID);
-        String title = intent.getStringExtra(EXTRA_MOVIE_TITLE);
-        String time = intent.getStringExtra(EXTRA_SHOWTIME_TIME);
+        movieTitle = intent.getStringExtra(EXTRA_MOVIE_TITLE);
+        showtimeTime = intent.getStringExtra(EXTRA_SHOWTIME_TIME);
         String theaterId = intent.getStringExtra(EXTRA_THEATER_ID);
 
-        movieTitle.setText(title);
-        showtimeTime.setText(getString(R.string.showtime_label, time));
+        movieTitleView.setText(movieTitle);
+        showtimeTimeView.setText(getString(R.string.showtime_label, showtimeTime));
         theater.setText(getString(R.string.theater_label, theaterId));
 
         seatAdapter = new SeatAdapter();
@@ -62,20 +70,29 @@ public class BookingActivity extends AppCompatActivity {
         seatRecycler.setAdapter(seatAdapter);
 
         seatAdapter.submitList(buildSeatList());
-        seatAdapter.setOnSeatClickListener(seat -> {
-            selectedSeatView.setText(getString(R.string.selected_seat_label, seat));
+        seatAdapter.setOnSeatClickListener(seats -> {
+            if (seats.isEmpty()) {
+                selectedSeatView.setText(getString(R.string.selected_seat_empty));
+            } else {
+                selectedSeatView.setText(getString(
+                    R.string.selected_seat_label,
+                    joinSeats(seats)
+                ));
+            }
         });
 
         viewModel = new ViewModelProvider(this).get(BookingViewModel.class);
+        functionsRepository = new FcmFunctionsRepository();
         observeBooking(showtimeId);
 
         confirmButton.setOnClickListener(view -> {
-            String seat = seatAdapter.getSelectedSeat();
-            if (showtimeId == null || seat == null) {
+            List<String> seats = seatAdapter.getSelectedSeats();
+            if (showtimeId == null || seats.isEmpty()) {
                 Toast.makeText(this, R.string.error_select_seat, Toast.LENGTH_SHORT).show();
                 return;
             }
-            viewModel.bookTicket(showtimeId, seat);
+            lastSelectedSeats = new ArrayList<>(seats);
+            viewModel.bookTickets(showtimeId, seats);
         });
     }
 
@@ -107,6 +124,21 @@ public class BookingActivity extends AppCompatActivity {
                 case SUCCESS:
                     setLoading(false);
                     Toast.makeText(this, R.string.booking_success, Toast.LENGTH_SHORT).show();
+                    functionsRepository.sendBookingNotification(
+                        movieTitle,
+                        showtimeTime,
+                        lastSelectedSeats,
+                        () -> new Handler(Looper.getMainLooper()).postDelayed(() -> {
+                            if (isFinishing() || isDestroyed()) {
+                                return;
+                            }
+                            NotificationHelper.showNotification(
+                                this,
+                                getString(R.string.notification_default_title),
+                                getString(R.string.notification_default_body)
+                            );
+                        }, 2000)
+                    );
                     viewModel.resetState();
                     finish();
                     break;
@@ -140,5 +172,16 @@ public class BookingActivity extends AppCompatActivity {
             }
         }
         return seats;
+    }
+
+    private String joinSeats(List<String> seats) {
+        StringBuilder builder = new StringBuilder();
+        for (int i = 0; i < seats.size(); i++) {
+            builder.append(seats.get(i));
+            if (i < seats.size() - 1) {
+                builder.append(", ");
+            }
+        }
+        return builder.toString();
     }
 }
