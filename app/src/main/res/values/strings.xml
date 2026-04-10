@@ -37,4 +37,15 @@
     <string name="tickets_error">Khong the tai ve, vui long thu lai</string>
     <string name="ticket_seat_label">Ghe: %1$s</string>
     <string name="ticket_showtime_label">Showtime: %1$s</string>
+    <string name="notification_channel_name">Nhac gio chieu</string>
+    <string name="notification_channel_desc">Thong bao nhac gio xem phim</string>
+    <string name="notification_default_title">Nhac gio xem phim</string>
+    <string name="notification_default_body">Sap den gio chieu, dung quen xem phim!</string>
+    <string name="nav_home">Trang chu</string>
+    <string name="nav_tickets">Ve cua toi</string>
+    <string name="nav_profile">Profile</string>
+    <string name="profile_title">Thong tin tai khoan</string>
+    <string name="action_seed_data">Seed du lieu mau</string>
+    <string name="seed_success">Seed du lieu thanh cong</string>
+    <string name="seed_error">Seed du lieu that bai</string>
 </resources>
