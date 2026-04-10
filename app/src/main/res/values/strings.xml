@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">Movie Ticket App</string>
+    <string name="login_title">Dang nhap</string>
+    <string name="register_title">Dang ky</string>
+    <string name="label_name">Ho ten</string>
+    <string name="label_email">Email</string>
+    <string name="label_password">Mat khau</string>
+    <string name="action_login">Dang nhap</string>
+    <string name="action_register">Dang ky</string>
+    <string name="action_go_register">Chua co tai khoan? Dang ky</string>
+    <string name="action_go_login">Da co tai khoan? Dang nhap</string>
+    <string name="error_empty_fields">Vui long nhap day du thong tin</string>
+    <string name="error_unknown">Co loi xay ra, vui long thu lai</string>
+    <string name="home_title">Movie Ticket App</string>
+    <string name="home_user_email">Email: %1$s</string>
+    <string name="action_logout">Dang xuat</string>
+</resources>
