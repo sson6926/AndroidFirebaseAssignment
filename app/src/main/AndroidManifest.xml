@@ -25,6 +25,8 @@
         </activity>
         <activity android:name=".ui.auth.RegisterActivity" />
         <activity android:name=".ui.movies.MovieDetailActivity" />
+        <activity android:name=".ui.booking.BookingActivity" />
+        <activity android:name=".ui.tickets.MyTicketsActivity" />
         <activity android:name=".MainActivity" />
     </application>
 

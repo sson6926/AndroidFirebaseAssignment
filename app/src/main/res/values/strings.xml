@@ -24,4 +24,17 @@
     <string name="showtimes_error">Khong the tai lich chieu, vui long thu lai</string>
     <string name="showtime_label">Gio chieu: %1$s</string>
     <string name="theater_label">Rap: %1$s</string>
+    <string name="booking_title">Dat ve</string>
+    <string name="selected_seat_empty">Chua chon ghe</string>
+    <string name="selected_seat_label">Ghe da chon: %1$s</string>
+    <string name="action_confirm_booking">Xac nhan dat ve</string>
+    <string name="error_select_seat">Vui long chon ghe</string>
+    <string name="error_missing_showtime">Khong tim thay lich chieu</string>
+    <string name="booking_success">Dat ve thanh cong</string>
+    <string name="action_my_tickets">Ve cua toi</string>
+    <string name="tickets_title">Ve cua toi</string>
+    <string name="tickets_empty">Chua co ve nao</string>
+    <string name="tickets_error">Khong the tai ve, vui long thu lai</string>
+    <string name="ticket_seat_label">Ghe: %1$s</string>
+    <string name="ticket_showtime_label">Showtime: %1$s</string>
 </resources>

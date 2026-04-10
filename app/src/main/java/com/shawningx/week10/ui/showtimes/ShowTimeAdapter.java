@@ -16,6 +16,15 @@ import java.util.List;
 
 public class ShowTimeAdapter extends RecyclerView.Adapter<ShowTimeAdapter.ShowTimeViewHolder> {
     private final List<ShowTime> items = new ArrayList<>();
+    private OnShowTimeClickListener listener;
+
+    public interface OnShowTimeClickListener {
+        void onShowTimeClick(ShowTime showTime);
+    }
+
+    public void setOnShowTimeClickListener(OnShowTimeClickListener listener) {
+        this.listener = listener;
+    }
 
     public void submitList(List<ShowTime> showTimes) {
         items.clear();
@@ -35,7 +44,7 @@ public class ShowTimeAdapter extends RecyclerView.Adapter<ShowTimeAdapter.ShowTi
 
     @Override
     public void onBindViewHolder(@NonNull ShowTimeViewHolder holder, int position) {
-        holder.bind(items.get(position));
+        holder.bind(items.get(position), listener);
     }
 
     @Override
@@ -53,7 +62,7 @@ public class ShowTimeAdapter extends RecyclerView.Adapter<ShowTimeAdapter.ShowTi
             theater = itemView.findViewById(R.id.text_theater);
         }
 
-        void bind(ShowTime showTime) {
+        void bind(ShowTime showTime, OnShowTimeClickListener listener) {
             time.setText(itemView.getContext().getString(
                 R.string.showtime_label,
                 showTime.getStartTime()
@@ -62,6 +71,12 @@ public class ShowTimeAdapter extends RecyclerView.Adapter<ShowTimeAdapter.ShowTi
                 R.string.theater_label,
                 showTime.getTheaterId()
             ));
+
+            itemView.setOnClickListener(view -> {
+                if (listener != null) {
+                    listener.onShowTimeClick(showTime);
+                }
+            });
         }
     }
 }

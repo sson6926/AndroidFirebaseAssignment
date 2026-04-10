@@ -14,8 +14,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.shawningx.week10.R;
-import com.shawningx.week10.viewmodel.ShowTimesViewModel;
+import com.shawningx.week10.ui.booking.BookingActivity;
 import com.shawningx.week10.ui.showtimes.ShowTimeAdapter;
+import com.shawningx.week10.viewmodel.ShowTimesViewModel;
 
 public class MovieDetailActivity extends AppCompatActivity {
     public static final String EXTRA_MOVIE_ID = "extra_movie_id";
@@ -63,6 +64,15 @@ public class MovieDetailActivity extends AppCompatActivity {
         adapter = new ShowTimeAdapter();
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
+
+        adapter.setOnShowTimeClickListener(showTime -> {
+            Intent bookingIntent = new Intent(this, BookingActivity.class);
+            bookingIntent.putExtra(BookingActivity.EXTRA_SHOWTIME_ID, showTime.getId());
+            bookingIntent.putExtra(BookingActivity.EXTRA_MOVIE_TITLE, movieTitle);
+            bookingIntent.putExtra(BookingActivity.EXTRA_SHOWTIME_TIME, showTime.getStartTime());
+            bookingIntent.putExtra(BookingActivity.EXTRA_THEATER_ID, showTime.getTheaterId());
+            startActivity(bookingIntent);
+        });
 
         viewModel = new ViewModelProvider(this).get(ShowTimesViewModel.class);
         observeShowTimes();
