@@ -18,6 +18,15 @@ import java.util.List;
 
 public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHolder> {
     private final List<Movie> items = new ArrayList<>();
+    private OnMovieClickListener listener;
+
+    public interface OnMovieClickListener {
+        void onMovieClick(Movie movie);
+    }
+
+    public void setOnMovieClickListener(OnMovieClickListener listener) {
+        this.listener = listener;
+    }
 
     public void submitList(List<Movie> movies) {
         items.clear();
@@ -37,7 +46,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
 
     @Override
     public void onBindViewHolder(@NonNull MovieViewHolder holder, int position) {
-        holder.bind(items.get(position));
+        holder.bind(items.get(position), listener);
     }
 
     @Override
@@ -59,7 +68,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
             description = itemView.findViewById(R.id.text_description);
         }
 
-        void bind(Movie movie) {
+        void bind(Movie movie, OnMovieClickListener listener) {
             title.setText(movie.getTitle());
             duration.setText(itemView.getContext().getString(
                 R.string.movie_duration,
@@ -73,6 +82,12 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
                 .error(R.drawable.ic_launcher_foreground)
                 .centerCrop()
                 .into(poster);
+
+            itemView.setOnClickListener(view -> {
+                if (listener != null) {
+                    listener.onMovieClick(movie);
+                }
+            });
         }
     }
 }

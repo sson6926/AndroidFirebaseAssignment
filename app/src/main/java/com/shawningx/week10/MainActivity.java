@@ -16,6 +16,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.shawningx.week10.ui.auth.LoginActivity;
 import com.shawningx.week10.ui.movies.MovieAdapter;
+import com.shawningx.week10.ui.movies.MovieDetailActivity;
 import com.shawningx.week10.viewmodel.MoviesViewModel;
 
 public class MainActivity extends AppCompatActivity {
@@ -43,6 +44,16 @@ public class MainActivity extends AppCompatActivity {
         adapter = new MovieAdapter();
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
+
+        adapter.setOnMovieClickListener(movie -> {
+            Intent intent = new Intent(this, MovieDetailActivity.class);
+            intent.putExtra(MovieDetailActivity.EXTRA_MOVIE_ID, movie.getId());
+            intent.putExtra(MovieDetailActivity.EXTRA_MOVIE_TITLE, movie.getTitle());
+            intent.putExtra(MovieDetailActivity.EXTRA_MOVIE_DESCRIPTION, movie.getDescription());
+            intent.putExtra(MovieDetailActivity.EXTRA_MOVIE_POSTER, movie.getPosterUrl());
+            intent.putExtra(MovieDetailActivity.EXTRA_MOVIE_DURATION, movie.getDuration());
+            startActivity(intent);
+        });
 
         moviesViewModel = new ViewModelProvider(this).get(MoviesViewModel.class);
         observeMovies();

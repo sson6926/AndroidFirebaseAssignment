@@ -19,4 +19,9 @@
     <string name="movies_error">Khong the tai phim, vui long thu lai</string>
     <string name="movie_duration">%1$d phut</string>
     <string name="movie_poster">Poster phim</string>
+    <string name="showtimes_title">Lich chieu</string>
+    <string name="showtimes_empty">Chua co lich chieu</string>
+    <string name="showtimes_error">Khong the tai lich chieu, vui long thu lai</string>
+    <string name="showtime_label">Gio chieu: %1$s</string>
+    <string name="theater_label">Rap: %1$s</string>
 </resources>
