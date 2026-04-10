@@ -14,4 +14,9 @@
     <string name="home_title">Movie Ticket App</string>
     <string name="home_user_email">Email: %1$s</string>
     <string name="action_logout">Dang xuat</string>
+    <string name="movies_title">Danh sach phim</string>
+    <string name="movies_empty">Chua co phim nao</string>
+    <string name="movies_error">Khong the tai phim, vui long thu lai</string>
+    <string name="movie_duration">%1$d phut</string>
+    <string name="movie_poster">Poster phim</string>
 </resources>
